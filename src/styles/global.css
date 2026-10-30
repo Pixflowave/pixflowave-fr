@@ -17,6 +17,17 @@
   }
 }
 
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .25rem .75rem;
+  list-style: none;
+  padding: 0;
+  margin-top: 2rem;
+  color: var(--muted);
+  font-size: .9rem;
+}
+
 *, *::before, *::after { box-sizing: border-box; }
 
 html {

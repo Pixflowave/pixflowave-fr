@@ -24,3 +24,5 @@ pnpm-debug.log*
 .idea/
 export-wordpress/
 wp-output/
+output/
+*.WordPress.*.xml
