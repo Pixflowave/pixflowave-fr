@@ -126,3 +126,16 @@ a:hover { text-decoration-thickness: 2px; }
   list-style: none;
   padding: 0;
 }
+.intro {
+  display: grid;
+  gap: 1.5rem;
+  align-items: start;
+}
+@media (min-width: 46rem) {
+  .intro { grid-template-columns: 1fr 14rem; }
+}
+.portrait {
+  width: 100%;
+  height: auto;
+  border-radius: .5rem;
+}

@@ -1,4 +1,8 @@
 ---
+
+import { Image } from 'astro:assets';
+import portrait from '../assets/Erwan_Bozec.png';
+
 import Base from '../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 
@@ -14,9 +18,10 @@ const articles = (await getCollection('articles', ({ data }) => !data.draft))
   title="Accueil"
   description="Coach numérique, médiation sensible et tangible, cheminement à travers les champs de la technè."
 >
-  <h1>Erwan Bozec</h1>
-
-  <p class="lede">
+<div class="intro">
+  <div>
+    <h1>Erwan Bozec</h1>
+    <p class="lede">
     De formation initiale en Mécanique et Automatismes Industriels, il s’évade
     d’abord par le truchement de l’<a href={withBase('/image/')}>image</a>. Il
     devient <a href={withBase('/coach-numerique/')}>Coach Numérique</a> puis, en
@@ -26,6 +31,15 @@ const articles = (await getCollection('articles', ({ data }) => !data.draft))
     Son travail est un cheminement à travers les champs de la
     <a href="https://fr.wikipedia.org/wiki/Techn%C3%A8">technè</a>.
   </p>
+  </div>
+  <Image
+    src={portrait}
+    alt="Portrait en noir et blanc d'Erwan Bozec"
+    width={360}
+    densities={[1, 2]}
+    class="portrait"
+  />
+</div>
 
   <h2>Derniers articles</h2>
   <ul class="post-list">

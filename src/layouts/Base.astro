@@ -1,6 +1,9 @@
 ---
 import '../styles/global.css';
 
+import { Image } from 'astro:assets';
+import logo from '../assets/Logo_Tribal.png';
+
 interface Props {
   title?: string;
   description?: string;
@@ -81,6 +84,7 @@ const current = Astro.url.pathname;
 
     <footer class="site-footer">
       <div class="inner">
+       <Image src={logo} alt="" width={160} />
         <p>
           © {new Date().getFullYear()} {siteName} ·
           <a href={withBase('/mentions-legales/')}>Mentions légales</a>
