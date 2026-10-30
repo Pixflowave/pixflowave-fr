@@ -102,3 +102,27 @@ a:hover { text-decoration-thickness: 2px; }
 
 .site-footer { border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
 .site-footer .inner { padding-block: 1.25rem; }
+
+.lede { font-size: 1.15rem; }
+
+.post-list {
+  list-style: none;
+  padding: 0;
+}
+.post-list li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: .25rem 1rem;
+  padding-block: .6rem;
+  border-bottom: 1px solid var(--line);
+}
+.post-list time { color: var(--muted); font-size: .9rem; }
+
+.social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .25rem 1.25rem;
+  list-style: none;
+  padding: 0;
+}

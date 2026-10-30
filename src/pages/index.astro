@@ -1,8 +1,54 @@
 ---
 import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const withBase = (path: string) => `${base}${path}`;
+
+const articles = (await getCollection('articles', ({ data }) => !data.draft))
+  .sort((a, b) => (b.data.date?.getTime() ?? 0) - (a.data.date?.getTime() ?? 0))
+  .slice(0, 6);
 ---
 
-<Base title="Accueil" description="Site de Pixflowave.">
-  <h1>Pixflowave</h1>
-  <p>Site en cours de reconstruction.</p>
+<Base
+  title="Accueil"
+  description="Coach numérique, médiation sensible et tangible, cheminement à travers les champs de la technè."
+>
+  <h1>Erwan Bozec</h1>
+
+  <p class="lede">
+    De formation initiale en Mécanique et Automatismes Industriels, il s’évade
+    d’abord par le truchement de l’<a href={withBase('/image/')}>image</a>. Il
+    devient <a href={withBase('/coach-numerique/')}>Coach Numérique</a> puis, en
+    collaboration avec le <a href="https://mediation.artefacts.coop/">Pôle Médiation</a>
+    d’<a href="https://www.artefacts.coop/">Artéfacts</a>, s’investit dans le design de
+    <a href={withBase('/mediation-sensible-tangible/')}>médiation sensible &amp; tangible</a>.
+    Son travail est un cheminement à travers les champs de la
+    <a href="https://fr.wikipedia.org/wiki/Techn%C3%A8">technè</a>.
+  </p>
+
+  <h2>Derniers articles</h2>
+  <ul class="post-list">
+    {articles.map((entry) => {
+      const slug = entry.id.replace(/\/index$/, '');
+      return (
+        <li>
+          <a href={withBase(`/${slug}/`)}>{entry.data.title}</a>
+          {entry.data.date && (
+            <time datetime={entry.data.date.toISOString()}>
+              {entry.data.date.toLocaleDateString('fr-FR', { dateStyle: 'long' })}
+            </time>
+          )}
+        </li>
+      );
+    })}
+  </ul>
+
+  <h2>Contact</h2>
+  <p>contact[@]pixflowave.fr</p>
+  <ul class="social">
+    <li><a href="https://www.facebook.com/Pixflowave.Coach">Facebook</a></li>
+    <li><a href="https://www.instagram.com/pixflowave">Instagram</a></li>
+    <li><a href="https://www.linkedin.com/in/pixflowave/">LinkedIn</a></li>
+  </ul>
 </Base>
