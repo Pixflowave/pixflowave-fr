@@ -78,7 +78,7 @@ a:hover { text-decoration-thickness: 2px; }
   text-align: center;
 }
 .brand {
-  font-weight: 350;
+  font-weight: 150;
   font-size: clamp(2rem, 6vw, 3.25rem);
   letter-spacing: .02em;
   text-decoration: none;
