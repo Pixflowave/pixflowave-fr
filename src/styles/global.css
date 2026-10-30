@@ -17,6 +17,7 @@
   }
 }
 
+
 .tags {
   display: flex;
   flex-wrap: wrap;
@@ -35,6 +36,13 @@ html {
   line-height: 1.65;
   background: var(--bg);
   color: var(--fg);
+  html {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.65;
+  background: var(--bg);
+  color: var(--fg);
+  overflow-x: hidden;
+}
 }
 
 body {

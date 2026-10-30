@@ -12,12 +12,25 @@ const withBase = (path: string) => `${base}${path}`;
 const articles = (await getCollection('articles', ({ data }) => !data.draft))
   .sort((a, b) => (b.data.date?.getTime() ?? 0) - (a.data.date?.getTime() ?? 0))
   .slice(0, 6);
+
+import ObservableEmbed from '../components/ObservableEmbed.astro';
 ---
 
 <Base
   title="Accueil"
   description="Coach numérique, médiation sensible et tangible, cheminement à travers les champs de la technè."
+  >
+<ObservableEmbed
+  src="https://observablehq.com/embed/@pixflowave/graph_neguentropie?cells=chartR"
+  title="Graphe réticulé des bifurcations noétiques"
+  wide
+  invert
+  height="80vh"
 >
+  Graphique interactif ·
+  <a href="https://observablehq.com/@pixflowave/graph_neguentropie">Néguentropie by Pixflowave</a>
+</ObservableEmbed>
+
 <div class="intro">
   <div>
     <h1>Erwan Bozec</h1>

@@ -1,0 +1,61 @@
+---
+interface Props {
+  src: string;
+  title: string;
+  height?: string;
+  wide?: boolean;
+  invert?: boolean;
+}
+
+const { src, title, height = '75vh', wide = false, invert = false } = Astro.props;
+const id = `embed-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<figure class:list={['embed', { wide, invert }]}>
+  <iframe
+    id={id}
+    src={src}
+    title={title}
+    loading="lazy"
+    allowfullscreen
+    style={`height:${height}`}
+  ></iframe>
+  <figcaption>
+    <button type="button" data-fs={id}>Plein écran</button>
+    <a href={src} target="_blank" rel="noopener">Ouvrir dans un nouvel onglet</a>
+    <slot />
+  </figcaption>
+</figure>
+
+<style>
+  .embed { margin: 2rem 0; }
+  .embed.wide { width: 100vw; margin-left: calc(50% - 50vw); }
+  iframe {
+    display: block;
+    width: 100%;
+    border: 0;
+    border-block: 1px solid var(--line);
+  }
+  figcaption {
+    max-width: var(--max);
+    margin: .5rem auto 0;
+    padding-inline: 1.25rem;
+    color: var(--muted);
+    font-size: .9rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem 1rem;
+  }
+  @media (prefers-color-scheme: dark) {
+    .invert iframe { filter: invert(0.85) hue-rotate(180deg); }
+  }
+</style>
+
+<script>
+  document.querySelectorAll('button[data-fs]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const id = button.getAttribute('data-fs');
+      if (id) document.getElementById(id)?.requestFullscreen();
+    });
+  });
+</script>
