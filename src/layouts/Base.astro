@@ -1,4 +1,6 @@
 ---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const withBase = (path) => `${base}${path}`;
 import '../styles/global.css';
 
 interface Props {
@@ -37,8 +39,8 @@ const current = Astro.url.pathname;
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    <link rel="sitemap" href={withBase('/sitemap-index.xml')}
 
     <meta property="og:site_name" content={siteName} />
     <meta property="og:locale" content="fr_FR" />
@@ -60,8 +62,8 @@ const current = Astro.url.pathname;
             {nav.map((item) => (
               <li>
                 <a
-                  href={item.href}
-                  aria-current={current === item.href ? 'page' : undefined}
+                  href={withBase(item.href)}
+                  aria-current={current === withBase(item.href) ? 'page' : undefined}
                 >
                   {item.label}
                 </a>
@@ -80,7 +82,7 @@ const current = Astro.url.pathname;
       <div class="inner">
         <p>
           © {new Date().getFullYear()} {siteName} ·
-          <a href="/mentions-legales/">Mentions légales</a>
+          <a href={withBase('/mentions-legales/')}>Mentions légales</a>
         </p>
       </div>
     </footer>
