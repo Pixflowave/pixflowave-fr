@@ -30,7 +30,16 @@ html {
   color: var(--fg);
 }
 
-button { font: inherit; }
+button {
+  font: inherit;
+  color: var(--fg);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: .25rem;
+  padding: .1rem .6rem;
+  cursor: pointer;
+}
+button:hover { border-color: var(--link); }
 
 body {
   margin: 0;
@@ -69,7 +78,7 @@ a:hover { text-decoration-thickness: 2px; }
   text-align: center;
 }
 .brand {
-  font-weight: 700;
+  font-weight: 350;
   font-size: clamp(2rem, 6vw, 3.25rem);
   letter-spacing: .02em;
   text-decoration: none;
@@ -109,6 +118,7 @@ a:hover { text-decoration-thickness: 2px; }
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 30rem), 1fr));
   gap: var(--edge);
+  align-items: center;
   margin: 2rem 0;
 }
 

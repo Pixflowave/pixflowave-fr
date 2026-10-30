@@ -3,11 +3,13 @@ interface Props {
   src: string;
   title: string;
   height?: string;
+  ratio?: string;
   invert?: boolean;
 }
 
-const { src, title, height = '80vh', invert = false } = Astro.props;
+const { src, title, height = '80vh', ratio, invert = false } = Astro.props;
 const id = `embed-${Math.random().toString(36).slice(2, 8)}`;
+const frameStyle = ratio ? `aspect-ratio:${ratio};height:auto` : `height:${height}`;
 ---
 
 <figure class:list={['embed', { invert }]}>
@@ -17,7 +19,7 @@ const id = `embed-${Math.random().toString(36).slice(2, 8)}`;
     title={title}
     loading="lazy"
     allowfullscreen
-    style={`height:${height}`}
+    style={frameStyle}
   ></iframe>
   <figcaption>
     <button type="button" data-fs={id}>Plein écran</button>
@@ -40,6 +42,7 @@ const id = `embed-${Math.random().toString(36).slice(2, 8)}`;
     font-size: .9rem;
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: .25rem 1rem;
   }
   @media (prefers-color-scheme: dark) {
