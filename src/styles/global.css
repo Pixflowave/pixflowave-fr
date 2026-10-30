@@ -118,7 +118,7 @@ a:hover { text-decoration-thickness: 2px; }
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 30rem), 1fr));
   gap: var(--edge);
-  align-items: center;
+  align-items: start;
   margin: 2rem 0;
 }
 
