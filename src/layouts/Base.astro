@@ -1,7 +1,9 @@
 ---
 import '../styles/global.css';
-
+import '@fontsource-variable/raleway';
+import '@fontsource-variable/raleway/wght-italic.css';
 import { Image } from 'astro:assets';
+import portrait from '../assets/Erwan_Bozec.png';
 import logo from '../assets/Logo_Tribal.png';
 
 interface Props {
@@ -83,8 +85,16 @@ const current = Astro.url.pathname;
     </main>
 
     <footer class="site-footer">
-      <div class="inner">
-       <Image src={logo} alt="" width={160} />
+      <div class="inner footer-center">
+        <Image
+          src={portrait}
+          alt="Portrait en noir et blanc d'Erwan Bozec"
+          width={160}
+          densities={[1, 2]}
+          class="footer-portrait"
+        />
+        <Image src={logo} alt="" width={120} class="footer-logo" />
+        <p>contact[@]pixflowave.fr</p>
         <p>
           © {new Date().getFullYear()} {siteName} ·
           <a href={withBase('/mentions-legales/')}>Mentions légales</a>

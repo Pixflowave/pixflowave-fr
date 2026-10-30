@@ -3,15 +3,14 @@ interface Props {
   src: string;
   title: string;
   height?: string;
-  wide?: boolean;
   invert?: boolean;
 }
 
-const { src, title, height = '75vh', wide = false, invert = false } = Astro.props;
+const { src, title, height = '80vh', invert = false } = Astro.props;
 const id = `embed-${Math.random().toString(36).slice(2, 8)}`;
 ---
 
-<figure class:list={['embed', { wide, invert }]}>
+<figure class:list={['embed', { invert }]}>
   <iframe
     id={id}
     src={src}
@@ -22,14 +21,13 @@ const id = `embed-${Math.random().toString(36).slice(2, 8)}`;
   ></iframe>
   <figcaption>
     <button type="button" data-fs={id}>Plein écran</button>
-    <a href={src} target="_blank" rel="noopener">Ouvrir dans un nouvel onglet</a>
+    <a href={src} target="_blank" rel="noopener">Nouvel onglet</a>
     <slot />
   </figcaption>
 </figure>
 
 <style>
-  .embed { margin: 2rem 0; }
-  .embed.wide { width: 100vw; margin-left: calc(50% - 50vw); }
+  .embed { margin: 0; }
   iframe {
     display: block;
     width: 100%;
@@ -37,9 +35,7 @@ const id = `embed-${Math.random().toString(36).slice(2, 8)}`;
     border-block: 1px solid var(--line);
   }
   figcaption {
-    max-width: var(--max);
-    margin: .5rem auto 0;
-    padding-inline: 1.25rem;
+    margin-top: .5rem;
     color: var(--muted);
     font-size: .9rem;
     display: flex;

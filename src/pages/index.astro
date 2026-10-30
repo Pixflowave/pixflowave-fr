@@ -1,9 +1,6 @@
 ---
-
-import { Image } from 'astro:assets';
-import portrait from '../assets/Erwan_Bozec.png';
-
 import Base from '../layouts/Base.astro';
+import ObservableEmbed from '../components/ObservableEmbed.astro';
 import { getCollection } from 'astro:content';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -12,40 +9,44 @@ const withBase = (path: string) => `${base}${path}`;
 const articles = (await getCollection('articles', ({ data }) => !data.draft))
   .sort((a, b) => (b.data.date?.getTime() ?? 0) - (a.data.date?.getTime() ?? 0))
   .slice(0, 6);
-
-import ObservableEmbed from '../components/ObservableEmbed.astro';
 ---
 
 <Base
   title="Accueil"
   description="Coach numérique, médiation sensible et tangible, cheminement à travers les champs de la technè."
-  >
-<ObservableEmbed
-  src="https://observablehq.com/embed/@pixflowave/graph_neguentropie?cells=chartR"
-  title="Graphe réticulé des bifurcations noétiques"
-  wide
-  invert
-  height="80vh"
 >
-  Graphique interactif ·
-  <a href="https://observablehq.com/@pixflowave/graph_neguentropie">Néguentropie by Pixflowave</a>
-</ObservableEmbed>
+  <h1>Erwan Bozec</h1>
 
-<div class="intro">
-  <div>
-    <h1>Erwan Bozec</h1>
-    <p class="lede">
-    De formation initiale en Mécanique et Automatismes Industriels, il s’évade d’abord par le truchement de l’<a href={withBase('/image/')}>image</a>. Il devient <a href={withBase('/coach-numerique/')}>Coach Numérique</a> puis, en collaboration avec le <a href="https://mediation.artefacts.coop/">Pôle Médiation</a> d’<a href="https://www.artefacts.coop/">Artéfacts</a>, s’investit dans le design de <a href={withBase('/mediation-sensible-tangible/')}>médiation sensible &amp; tangible</a>. Son travail est un cheminement à travers les champs de la <a href="https://fr.wikipedia.org/wiki/Techn%C3%A8">technè</a>.
+  <p class="lede">
+    De formation initiale en Mécanique et Automatismes Industriels, il s’évade
+    d’abord par le truchement de l’<a href={withBase('/image/')}>image</a>. Il
+    devient <a href={withBase('/coach-numerique/')}>Coach Numérique</a> puis, en
+    collaboration avec le <a href="https://mediation.artefacts.coop/">Pôle Médiation</a>
+    d’<a href="https://www.artefacts.coop/">Artéfacts</a>, s’investit dans le design de
+    <a href={withBase('/mediation-sensible-tangible/')}>médiation sensible &amp; tangible</a>.
+    Son travail est un cheminement à travers les champs de la
+    <a href="https://fr.wikipedia.org/wiki/Techn%C3%A8">technè</a>.
   </p>
+
+  <div class="embeds">
+    <ObservableEmbed
+      src="https://observablehq.com/embed/@pixflowave/graph_neguentropie?cells=chartR"
+      title="Graphe réticulé des bifurcations noétiques"
+      invert
+    >
+      Graphe réticulé ·
+      <a href="https://observablehq.com/@pixflowave/graph_neguentropie">Néguentropie by Pixflowave</a>
+    </ObservableEmbed>
+
+    <ObservableEmbed
+      src="https://observablehq.com/embed/@pixflowave/airocean-attracteur-de-lorentz@710?cells=dual"
+      title="Projection Aireocean | Attracteur étrange de Lorentz"
+      invert
+    >
+      Projection Aireocean | Attracteur étrange de Lorentz
+      <a href="https://observablehq.com/@pixflowave/airocean-attracteur-de-lorentz@710">Néguentropie by Pixflowave</a>
+    </ObservableEmbed>
   </div>
-  <Image
-    src={portrait}
-    alt="Portrait en noir et blanc d'Erwan Bozec"
-    width={360}
-    densities={[1, 2]}
-    class="portrait"
-  />
-</div>
 
   <h2>Derniers articles</h2>
   <ul class="post-list">
@@ -64,8 +65,7 @@ import ObservableEmbed from '../components/ObservableEmbed.astro';
     })}
   </ul>
 
-  <h2>Contact</h2>
-  <p>contact[@]pixflowave.fr</p>
+  <h2>Liens</h2>
   <ul class="social">
     <li><a href="https://www.facebook.com/Pixflowave.Coach">Facebook</a></li>
     <li><a href="https://www.instagram.com/pixflowave">Instagram</a></li>
