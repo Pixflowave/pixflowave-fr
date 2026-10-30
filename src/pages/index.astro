@@ -15,19 +15,7 @@ const articles = (await getCollection('articles', ({ data }) => !data.draft))
   title="Accueil"
   description="Coach numérique, médiation sensible et tangible, cheminement à travers les champs de la technè."
 >
-  <h1>Erwan Bozec</h1>
-
-  <p class="lede">
-    De formation initiale en Mécanique et Automatismes Industriels, il s’évade
-    d’abord par le truchement de l’<a href={withBase('/image/')}>image</a>. Il
-    devient <a href={withBase('/coach-numerique/')}>Coach Numérique</a> puis, en
-    collaboration avec le <a href="https://mediation.artefacts.coop/">Pôle Médiation</a>
-    d’<a href="https://www.artefacts.coop/">Artéfacts</a>, s’investit dans le design de
-    <a href={withBase('/mediation-sensible-tangible/')}>médiation sensible &amp; tangible</a>.
-    Son travail est un cheminement à travers les champs de la
-    <a href="https://fr.wikipedia.org/wiki/Techn%C3%A8">technè</a>.
-  </p>
-
+  
   <div class="embeds">
     <ObservableEmbed
       src="https://observablehq.com/embed/@pixflowave/graph_neguentropie?cells=chartR"
@@ -47,6 +35,14 @@ const articles = (await getCollection('articles', ({ data }) => !data.draft))
       <a href="https://observablehq.com/@pixflowave/airocean-attracteur-de-lorentz@710">Néguentropie by Pixflowave</a>
     </ObservableEmbed>
   </div>
+
+  <h1>Erwan Bozec</h1>
+
+  <p class="lede">
+    De formation initiale en Mécanique et Automatismes Industriels, il s’évade d’abord par le truchement de l’<a href={withBase('/image/')}>image</a>. Il devient <a href={withBase('/coach-numerique/')}>Coach Numérique</a> puis, en
+    collaboration avec le <a href="https://mediation.artefacts.coop/">Pôle Médiation</a> d’<a href="https://www.artefacts.coop/">Artéfacts</a>, s’investit dans le design de <a href={withBase('/mediation-sensible-tangible/')}>médiation sensible &amp; tangible</a>.
+    Son travail est un cheminement à travers les champs de la <a href="https://fr.wikipedia.org/wiki/Techn%C3%A8">technè</a>.
+  </p>
 
   <h2>Derniers articles</h2>
   <ul class="post-list">
