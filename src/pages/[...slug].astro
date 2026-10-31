@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import Galerie from '../components/Galerie.astro';
 
 export async function getStaticPaths() {
   const pages = await getCollection('pages', ({ data }) => !data.draft);
@@ -16,6 +17,7 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 const { title, heading, description, date, tags } = entry.data;
 const isArticle = entry.collection === 'articles';
+const slug = entry.id.replace(/\/index$/, '');
 ---
 
 <Base title={title} description={description}>
@@ -28,6 +30,7 @@ const isArticle = entry.collection === 'articles';
         </time>
       </p>
     )}
+    {slug === 'image' && <Galerie />}
     <Content />
     {isArticle && tags.length > 0 && (
       <ul class="tags">

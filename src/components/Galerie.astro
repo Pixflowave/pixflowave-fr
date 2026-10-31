@@ -1,0 +1,173 @@
+---
+import { getImage } from 'astro:assets';
+
+const modules = import.meta.glob('../assets/galerie/*.{jpg,jpeg,JPG,JPEG,png,webp,avif}', {
+  eager: true,
+}) as Record<string, { default: ImageMetadata }>;
+
+const photos = await Promise.all(
+  Object.entries(modules)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(async ([path, mod]) => {
+      const name = (path.split('/').pop() ?? '').replace(/\.[^.]+$/, '');
+      const alt = name.replace(/^\d+[-_ ]*/, '').replace(/[-_]+/g, ' ');
+      const thumb = await getImage({ src: mod.default, width: 700, format: 'webp' });
+      const large = await getImage({ src: mod.default, width: 2600, format: 'webp' });
+      return { alt, thumb, large, ratio: mod.default.width / mod.default.height };
+    })
+);
+
+const grandes = photos.map((p) => ({ src: p.large.src, alt: p.alt }));
+---
+
+<ul class="galerie">
+  {photos.map((p, i) => (
+    <li style={`--r:${p.ratio.toFixed(4)}`}>
+      <button type="button" class="vignette" data-index={i} aria-label={`Agrandir : ${p.alt}`}>
+        <img
+          src={p.thumb.src}
+          width={p.thumb.attributes.width}
+          height={p.thumb.attributes.height}
+          alt={p.alt}
+          loading="lazy"
+          decoding="async"
+        />
+      </button>
+    </li>
+  ))}
+</ul>
+
+<dialog id="visionneuse" aria-label="Photo agrandie">
+  <button type="button" class="fermer" aria-label="Fermer">×</button>
+  <button type="button" class="plein" aria-label="Plein écran (touche F)">⛶</button>
+  <button type="button" class="prec" aria-label="Photo précédente">‹</button>
+  <img id="grande" alt="" />
+  <button type="button" class="suiv" aria-label="Photo suivante">›</button>
+</dialog>
+
+<script is:inline define:vars={{ grandes }}>
+  const dlg = document.getElementById('visionneuse');
+  const img = document.getElementById('grande');
+  const boutonPlein = dlg.querySelector('.plein');
+  let courante = 0;
+
+  const afficher = (n) => {
+    courante = (n + grandes.length) % grandes.length;
+    img.src = grandes[courante].src;
+    img.alt = grandes[courante].alt;
+  };
+
+  const basculerPleinEcran = async () => {
+    try {
+      if (document.fullscreenElement) await document.exitFullscreen();
+      else await dlg.requestFullscreen();
+    } catch (e) {
+      /* non pris en charge : la visionneuse occupe déjà toute la fenêtre */
+    }
+  };
+
+  if (!document.fullscreenEnabled) boutonPlein.hidden = true;
+
+  document.querySelectorAll('.vignette').forEach((bouton) => {
+    bouton.addEventListener('click', () => {
+      afficher(Number(bouton.dataset.index));
+      dlg.showModal();
+    });
+  });
+
+  dlg.querySelector('.fermer').addEventListener('click', () => dlg.close());
+  dlg.querySelector('.prec').addEventListener('click', () => afficher(courante - 1));
+  dlg.querySelector('.suiv').addEventListener('click', () => afficher(courante + 1));
+  boutonPlein.addEventListener('click', basculerPleinEcran);
+  img.addEventListener('dblclick', basculerPleinEcran);
+
+  dlg.addEventListener('click', (e) => {
+    if (e.target === dlg) dlg.close();
+  });
+  dlg.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') afficher(courante - 1);
+    if (e.key === 'ArrowRight') afficher(courante + 1);
+    if (e.key === 'f' || e.key === 'F') basculerPleinEcran();
+  });
+  dlg.addEventListener('close', () => {
+    if (document.fullscreenElement) document.exitFullscreen();
+  });
+</script>
+
+<style>
+  .galerie {
+    --row: 14rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--edge);
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0;
+  }
+  .galerie li {
+    flex-grow: calc(var(--r) * 100);
+    flex-basis: calc(var(--r) * var(--row));
+  }
+  .galerie::after {
+    content: '';
+    flex-grow: 100000;
+  }
+  @media (max-width: 40rem) {
+    .galerie { --row: 9rem; }
+  }
+
+  .vignette {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: zoom-in;
+  }
+  .vignette img { display: block; width: 100%; height: auto; }
+
+  dialog {
+    width: 100%;
+    height: 100%;
+    max-width: 100vw;
+    max-height: 100vh;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+  dialog[open] { display: grid; place-items: center; }
+  dialog::backdrop { background: rgba(0, 0, 0, .92); }
+  dialog:fullscreen { background: #000; }
+  dialog img {
+    max-width: 96vw;
+    max-height: 94vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    cursor: zoom-in;
+  }
+  dialog:fullscreen img {
+    max-width: 100vw;
+    max-height: 100vh;
+    cursor: zoom-out;
+  }
+  dialog button {
+    position: absolute;
+    z-index: 1;
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, .55);
+    color: #fff;
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  dialog button[hidden] { display: none; }
+  .fermer { top: .75rem; right: .75rem; }
+  .plein { top: .75rem; right: 4.25rem; font-size: 1.5rem; }
+  .prec { left: .75rem; top: 50%; transform: translateY(-50%); }
+  .suiv { right: .75rem; top: 50%; transform: translateY(-50%); }
+</style>
