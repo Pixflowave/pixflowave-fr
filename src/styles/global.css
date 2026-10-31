@@ -71,18 +71,31 @@ a:hover { text-decoration-thickness: 2px; }
 
 .site-header .inner {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: .5rem;
-  padding-block: 1.5rem 1rem;
+  flex-direction: column;   /* empile brand puis nav */
+  align-items: center;      /* tout est centré */
   text-align: center;
+  gap: 1rem;
+  padding-block: 1.5rem;     /* un peu d'air au-dessus/en-dessous */
 }
+
 .brand {
-  font-weight: 150;
-  font-size: clamp(2rem, 6vw, 3.25rem);
-  letter-spacing: .02em;
+  display: flex;
+  flex-direction: column;   /* logo sous le titre */
+  align-items: center;      /* centré sous le texte */
   text-decoration: none;
-  color: var(--title);
+  line-height: 1.1;
+}
+
+.brand span {
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: .02em;
+}
+
+.header-logo {
+  margin-top: 0.35rem;
+  width: 150px;   /* 96px risque d'être grand en header, ajustez */
+  height: auto;
 }
 .site-header nav ul {
   display: flex;
