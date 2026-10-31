@@ -1,7 +1,6 @@
 ---
 import '../styles/global.css';
-import '@fontsource-variable/raleway';
-import '@fontsource-variable/raleway/wght-italic.css';
+import '@fontsource-variable/plus-jakarta-sans';
 import { Image } from 'astro:assets';
 import portrait from '../assets/Erwan_Bozec.png';
 import logo from '../assets/Logo_Tribal.png';
@@ -62,7 +61,16 @@ const current = Astro.url.pathname;
 
     <header class="site-header">
       <div class="inner">
-        <a class="brand" href={withBase('/')}>{siteName}</a>
+        <a class="brand" href={withBase('/')}>
+          <span>{siteName}</span>
+          <Image
+            src={logo}
+            alt=""
+            width={96}
+            loading="eager"
+            class="header-logo"
+          />
+        </a>
         <nav aria-label="Navigation principale">
           <ul>
             {nav.map((item) => (
