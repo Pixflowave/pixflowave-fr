@@ -151,3 +151,23 @@ a:hover { text-decoration-thickness: 2px; }
   color: var(--muted);
   font-size: .9rem;
 }
+.galerie {
+  --row: 14rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--edge);
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0;
+}
+.galerie li {
+  flex-grow: calc(var(--r) * 100);
+  flex-basis: calc(var(--r) * var(--row));
+}
+.galerie::after {
+  content: '';
+  flex-grow: 100000;
+}
+@media (max-width: 40rem) {
+  .galerie { --row: 9rem; }
+}
