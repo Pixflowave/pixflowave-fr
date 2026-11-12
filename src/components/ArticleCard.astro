@@ -1,0 +1,56 @@
+---
+import { excerpt, slugOf, type Article } from '../lib/articles';
+
+interface Props {
+  entry: Article;
+  /** Texte au-dessus du titre, ex. "← Précédent" */
+  label?: string;
+  /** Carte compacte : sans résumé */
+  compact?: boolean;
+}
+
+const { entry, label, compact = false } = Astro.props;
+const { title, date } = entry.data;
+const href = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/${slugOf(entry)}/`;
+---
+
+<a class="card" href={href}>
+  {label && <span class="card-label">{label}</span>}
+  <strong class="card-title">{title}</strong>
+  {date && (
+    <time datetime={date.toISOString()}>
+      {date.toLocaleDateString('fr-FR', { dateStyle: 'long' })}
+    </time>
+  )}
+  {!compact && <p>{excerpt(entry)}</p>}
+</a>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: .2rem;
+    height: 100%;
+    padding: .9rem 1rem 1rem;
+    color: inherit;
+    text-decoration: none;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--bg);
+    transition: border-color .15s;
+  }
+  .card:hover { border-color: var(--link); }
+  .card-title { font-size: 1.05rem; font-weight: 600; line-height: 1.3; color: var(--link); }
+  .card:hover .card-title { text-decoration: underline; }
+  .card-label { font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  time { font-size: .85rem; color: var(--muted); }
+  p {
+    margin: .3rem 0 0;
+    font-size: .92rem;
+    color: var(--muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

@@ -3,22 +3,33 @@ import { getCollection, render } from 'astro:content';
 import { Image, getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Galerie from '../components/Galerie.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { getArticles, slugOf, excerpt } from '../lib/articles';
 
 export async function getStaticPaths() {
   const pages = await getCollection('pages', ({ data }) => !data.draft);
-  const articles = await getCollection('articles', ({ data }) => !data.draft);
+  const articles = await getArticles(); // du plus récent au plus ancien
 
-  return [...pages, ...articles].map((entry) => ({
-    params: { slug: entry.id.replace(/\/index$/, '') },
-    props: { entry },
-  }));
+  return [
+    ...pages.map((entry) => ({ params: { slug: slugOf(entry) }, props: { entry } })),
+    ...articles.map((entry, i) => ({
+      params: { slug: slugOf(entry) },
+      props: {
+        entry,
+        newer: articles[i - 1], // article plus récent
+        older: articles[i + 1], // article plus ancien
+        others: articles.filter((a) => a !== entry),
+      },
+    })),
+  ];
 }
 
-const { entry } = Astro.props;
+const { entry, newer, older, others = [] } = Astro.props;
 const { Content } = await render(entry);
-const { title, heading, description, date, tags, coverImage } = entry.data;
+const { title, heading, date, tags, coverImage } = entry.data;
 const isArticle = entry.collection === 'articles';
-const slug = entry.id.replace(/\/index$/, '');
+const slug = slugOf(entry);
+const description = isArticle ? excerpt(entry) : entry.data.description;
 
 // Image de partage (og:image), toujours générée quand une couverture existe
 const ogImage = coverImage
@@ -29,7 +40,7 @@ const showCover = coverImage && !/!\[[^\]]*\]\(|<img\b/.test(entry.body ?? '');
 ---
 
 <Base title={title} description={description} image={ogImage}>
-  <article>
+  <article class:list={{ 'article-content': isArticle }}>
     <h1>{heading ?? title}</h1>
     {isArticle && date && (
       <p>
@@ -49,4 +60,26 @@ const showCover = coverImage && !/!\[[^\]]*\]\(|<img\b/.test(entry.body ?? '');
       </ul>
     )}
   </article>
+
+  {isArticle && (
+    <nav class="article-nav" aria-label="Articles">
+      {(older || newer) && (
+        <div class="prev-next">
+          {older ? <ArticleCard entry={older} label="← Précédent" compact /> : <span />}
+          {newer ? <ArticleCard entry={newer} label="Suivant →" compact /> : <span />}
+        </div>
+      )}
+
+      {others.length > 0 && (
+        <>
+          <h2>Autres articles</h2>
+          <ul class="strip">
+            {others.map((a) => (
+              <li><ArticleCard entry={a} /></li>
+            ))}
+          </ul>
+        </>
+      )}
+    </nav>
+  )}
 </Base>

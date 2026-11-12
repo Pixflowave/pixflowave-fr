@@ -57,8 +57,13 @@ main { flex: 1; padding-block: 2rem; }
 
 h1, h2, h3 { line-height: 1.2; }
 img { max-width: 100%; height: auto; }
-a { color: var(--link); }
-a:hover { text-decoration-thickness: 2px; }
+/* Liens : soulignement fin et un peu décollé du texte */
+a {
+  color: var(--link);
+  text-decoration-thickness: 1px;
+  text-underline-offset: .2em;
+}
+a:hover { text-decoration-thickness: 1.5px; }
 
 .skip-link { position: absolute; left: -999px; }
 .skip-link:focus {
@@ -71,7 +76,7 @@ a:hover { text-decoration-thickness: 2px; }
 
 .site-header .inner {
   display: flex;
-  flex-direction: column;   /* empile brand puis nav */
+  flex-direction: column;
   align-items: center;      /* tout est centré */
   text-align: center;
   gap: 1rem;
@@ -87,30 +92,16 @@ a:hover { text-decoration-thickness: 2px; }
 }
 
 .brand span {
-  font-size: 1.5rem;
+  font-size: 2.25rem;
   font-weight: 300;
-  letter-spacing: .02em;
+  letter-spacing: .15em;
+  margin-right: -.15em; /* compense l'espace ajouté après la dernière lettre (centrage) */
 }
 
 .header-logo {
   margin-top: 0.35rem;
-  width: 150px;   /* 96px risque d'être grand en header, ajustez */
+  width: 225px;
   height: auto;
-}
-.site-header nav ul {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: .25rem 1.25rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.site-header nav a { text-decoration: none; color: var(--muted); }
-.site-header nav a:hover,
-.site-header nav a[aria-current="page"] {
-  color: var(--fg);
-  text-decoration: underline;
 }
 
 .site-footer { border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
@@ -135,21 +126,83 @@ a:hover { text-decoration-thickness: 2px; }
   margin: 2rem 0;
 }
 
-.post-list { list-style: none; padding: 0; }
-.post-list li {
+/* Articles (accueil) : 3 cadres par ligne sur ordinateur, 1 sur smartphone */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+@media (max-width: 60rem) { .cards { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 36rem) { .cards { grid-template-columns: 1fr; } }
+.more-articles > summary {
+  cursor: pointer;
+  color: var(--link);
+  margin-block: .5rem;
+}
+
+/* Bas d'article : précédent / suivant puis bandeau « Autres articles » */
+.article-nav { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+.prev-next {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .75rem;
+}
+.prev-next > :last-child { text-align: right; }
+/* Bandeau défilant au doigt (remplace la colonne de droite de l'ancien site) */
+.strip {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(75%, 17rem);
+  gap: .75rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  list-style: none;
+  padding: 0 0 .75rem;
+  margin: 0;
+}
+.strip > li { scroll-snap-align: start; }
+
+/* Images dans le texte (pages et articles) : regroupées dans un cadre
+   par src/lib/rehype-image-groups.mjs. Côte à côte si la place le permet,
+   sinon l'une sous l'autre ; jamais trop grandes. */
+.images {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  gap: .25rem 1rem;
-  padding-block: .6rem;
-  border-bottom: 1px solid var(--line);
+  justify-content: center;
+  align-items: center;
+  gap: .75rem;
+  margin: 1.5rem auto;
+  padding: .75rem;
+  max-width: 56rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
 }
-.post-list time { color: var(--muted); font-size: .9rem; }
+.images > img,
+.images > a {
+  flex: 1 1 15rem;
+  max-width: 28rem;
+  min-width: 0;
+}
+.images img {
+  display: block;
+  margin-inline: auto;
+  width: auto;          /* jamais agrandie au-delà de sa taille réelle */
+  max-width: 100%;
+  height: auto;
+  max-height: 22rem;
+  object-fit: contain;
+}
 
+.liens { text-align: center; margin-top: 2.5rem; }
 .social {
   display: flex;
   flex-wrap: wrap;
-  gap: .25rem 1.25rem;
+  justify-content: center;
+  gap: .4rem 1.5rem;
   list-style: none;
   padding: 0;
 }
@@ -185,3 +238,6 @@ a:hover { text-decoration-thickness: 2px; }
   .galerie { --row: 9rem; }
 }
 .cover { display: block; width: 100%; height: auto; margin: 1rem 0 2rem; border-radius: 4px; }
+@media (max-width: 30rem) {
+  .prev-next { grid-template-columns: 1fr; }
+}

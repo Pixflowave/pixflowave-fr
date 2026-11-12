@@ -1,6 +1,7 @@
 ---
 title: "Néguentropie au Festival du Printemps des Cartes"
 date: 2024-04-30
+coverImage: "./images/Printemps-des-cartes.png"
 categories: 
   - "mediation-sensible-et-tangible"
 tags: 
