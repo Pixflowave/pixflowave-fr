@@ -19,7 +19,7 @@ tags:
   - "observablehq"
   - "philosophie"
   - "web"
-coverImage: "MOIS-RCVL-HTD-2021-PROMO-1080x1080-MOIS.png"
+coverImage: "./images/MOIS-RCVL-HTD-2021-PROMO-1080x1080-MOIS.png"
 ---
 
 ![RCVL #HTD2021](images/MOIS-RCVL-HTD-2021-PROMO-1080x1080-MOIS-1024x1024.png)

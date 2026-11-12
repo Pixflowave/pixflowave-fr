@@ -5,7 +5,7 @@ categories:
   - "mediation-sensible-et-tangible"
 tags: 
   - "stop-motion"
-coverImage: "tous-en-routre-vers-nos-droits-scaled.jpg"
+coverImage: "./images/tous-en-routre-vers-nos-droits-scaled.jpg"
 ---
 
 Courant 2016, Nicolas Témiau, Clément Sayous et Erwan Bozec ont participé à un projet « Tous en route vers nos droits », en partenariat avec la Direction départementale de la cohésion sociale (DDCS). Objectif de l’opération : rappeler aux publics quels sont leurs droits en terme d’accès au logement, couverture des frais de santé (CMU), ouverture d’un compte…  

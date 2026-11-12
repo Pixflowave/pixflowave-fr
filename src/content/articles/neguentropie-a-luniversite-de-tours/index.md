@@ -19,7 +19,7 @@ tags:
   - "observablehq"
   - "philosophie"
   - "web"
-coverImage: "Capture-decran-2024-04-16-a-13.56.47.png"
+coverImage: "./images/Capture-decran-2024-04-16-a-13.56.47.png"
 ---
 
 [Néguentropie](http://neguentropie.art/) est une installation artistique qui vise à mobiliser les savoir-faire des participants en leur proposant de réaliser la construction d’un espace ludique et d'expérimenter un atelier de cartographie. A partir des recherche de Bernard Stiegler sur la néguanthropie, de Philippe Rivière sur les projections cartographiques et de quelques références au monde de Jean Oury, cet atelier permet de découvrir la diversité des représentations possibles de la planète et d'interroger leurs influences sur notre perception du monde.  

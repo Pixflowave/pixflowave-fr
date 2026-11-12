@@ -6,7 +6,7 @@ categories:
 tags: 
   - "paper-planet"
   - "video-time-lapse"
-coverImage: "Screenshot_2020-04-28-Trailer-L’IMAGE-AUX-RDV-12-13-octobre-2018.png"
+coverImage: "./images/Screenshot_2020-04-28-Trailer-L’IMAGE-AUX-RDV-12-13-octobre-2018.png"
 ---
 
 https://vimeo.com/315217811

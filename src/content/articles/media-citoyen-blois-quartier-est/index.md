@@ -6,7 +6,7 @@ categories:
 tags: 
   - "do-doc"
   - "paper-planet"
-coverImage: "dodoc-carre.png"
+coverImage: "./images/dodoc-carre.png"
 ---
 
 ![do.doc](images/i_logo.png)

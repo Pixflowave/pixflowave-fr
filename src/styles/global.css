@@ -184,3 +184,4 @@ a:hover { text-decoration-thickness: 2px; }
 @media (max-width: 40rem) {
   .galerie { --row: 9rem; }
 }
+.cover { display: block; width: 100%; height: auto; margin: 1rem 0 2rem; border-radius: 4px; }

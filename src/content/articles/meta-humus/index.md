@@ -12,7 +12,7 @@ tags:
   - "maker"
   - "numerique"
   - "philosophie"
-coverImage: "Instagram_Publication_1080x1080.png"
+coverImage: "./images/Instagram_Publication_1080x1080.png"
 ---
 
 ![Méta-Humus](images/Meta-Humus-1158x500-1-1024x442.jpg)

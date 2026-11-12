@@ -19,7 +19,7 @@ tags:
   - "observablehq"
   - "philosophie"
   - "web"
-coverImage: "HTD2022-Instagram-Publication-1080x1080-1.png"
+coverImage: "./images/HTD2022-Instagram-Publication-1080x1080-1.png"
 ---
 
 ## Néguentropie | La Fabrique de Blois

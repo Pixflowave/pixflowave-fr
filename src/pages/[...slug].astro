@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
+import { Image, getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Galerie from '../components/Galerie.astro';
 
@@ -15,12 +16,19 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
-const { title, heading, description, date, tags } = entry.data;
+const { title, heading, description, date, tags, coverImage } = entry.data;
 const isArticle = entry.collection === 'articles';
 const slug = entry.id.replace(/\/index$/, '');
+
+// Image de partage (og:image), toujours générée quand une couverture existe
+const ogImage = coverImage
+  ? (await getImage({ src: coverImage, width: 1200, format: 'jpg' })).src
+  : undefined;
+// Couverture affichée seulement si le texte ne contient pas déjà d'image (évite les doublons)
+const showCover = coverImage && !/!\[[^\]]*\]\(|<img\b/.test(entry.body ?? '');
 ---
 
-<Base title={title} description={description}>
+<Base title={title} description={description} image={ogImage}>
   <article>
     <h1>{heading ?? title}</h1>
     {isArticle && date && (
@@ -29,6 +37,9 @@ const slug = entry.id.replace(/\/index$/, '');
           {date.toLocaleDateString('fr-FR', { dateStyle: 'long' })}
         </time>
       </p>
+    )}
+    {showCover && (
+      <Image src={coverImage} alt="" widths={[600, 1000, 1400]} sizes="(max-width: 60rem) 100vw, 60rem" class="cover" />
     )}
     {slug === 'image' && <Galerie />}
     <Content />

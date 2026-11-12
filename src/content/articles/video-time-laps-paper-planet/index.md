@@ -6,7 +6,7 @@ categories:
 tags: 
   - "paper-planet"
   - "video-time-lapse"
-coverImage: "htd-600x200-1.jpg"
+coverImage: "./images/htd-600x200-1.jpg"
 ---
 
 https://vimeo.com/318209085

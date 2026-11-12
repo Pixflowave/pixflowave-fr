@@ -19,7 +19,7 @@ tags:
   - "observablehq"
   - "philosophie"
   - "web"
-coverImage: "Reboute-Néguentropie-1.png"
+coverImage: "./images/reboute-neguentropie.png"
 ---
 
 <iframe iframe="" title="RB_07 Le projet Néguentropie" src="https://tube.futuretic.fr/videos/embed/c44a1628-d1ba-4f47-a5f4-db6e137e0443" frameborder="0" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
