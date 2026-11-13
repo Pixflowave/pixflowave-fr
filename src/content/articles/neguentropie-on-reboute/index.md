@@ -22,14 +22,15 @@ tags:
 coverImage: "./images/reboute-neguentropie.png"
 ---
 
-<iframe iframe="" title="RB_07 Le projet Néguentropie" src="https://tube.futuretic.fr/videos/embed/c44a1628-d1ba-4f47-a5f4-db6e137e0443" frameborder="0" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+<iframe title="Reboute Arts et Technologies (ré) approprié - Projet Néguentropie" src="https://tube.futuretic.fr/videos/embed/hokQhxiEMJegDSWxzWWqSP" loading="lazy" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
 
 ## Reboute ?
 
-A l’occasion de l’événement [Human Tech Days](https://www.humantechdays.fr/), organisé par le Conseil régional Centre-Val de Loire, l’association [La Labomedia](https://labomedia.org/reboute-arts-et-technologie-reappropriees/) lance [Reboute](https://tube.futuretic.fr/video-channels/reboutelatechnologie/videos), une chaîne sur la plateforme de vidéos en ligne [PeerTube Futurétic](https://tube.futuretic.fr/).
+A l’occasion de l’événement [Human Tech Days](https://www.humantechdays.fr/), organisé par le Conseil régional Centre-Val de Loire, l’association [La Labomedia](https://labomedia.org/reboute-arts-et-technologie-reappropriees/) lance [Reboute](https://tube.futuretic.fr/w/hokQhxiEMJegDSWxzWWqSP), une chaîne sur la plateforme de vidéos en ligne [PeerTube Futurétic](https://tube.futuretic.fr/).
 
-**Reboute les technologies ou comment mettre en lumière les expérimentations artistiques et techniques, le partage des connaissances et les initiatives citoyennes dans la région Centre Val de Loire et ses alentours. À retrouver sur [la chaîne « reboute »](https://tube.futuretic.fr/video-channels/reboutelatechnologie/videos)  
-**
+**Reboute les technologies ou comment mettre en lumière les expérimentations artistiques et techniques, le partage des connaissances et les initiatives citoyennes dans la région Centre Val de Loire et ses alentours.**
+
+La vidéo est à retrouver sur [Reboute | Néguentropie](https://tube.futuretic.fr/a/erwan.b/video-channels).
 
 A partir du 20 mai 2021, Reboute part à la rencontre de personnes, de collectifs, d’initiatives et projets qui utilisent et développent d’autres approches de l’utilisation de technologies, de manière créative, écologique, située.
 

@@ -35,8 +35,8 @@ const description = isArticle ? excerpt(entry) : entry.data.description;
 const ogImage = coverImage
   ? (await getImage({ src: coverImage, width: 1200, format: 'jpg' })).src
   : undefined;
-// Couverture affichée seulement si le texte ne contient pas déjà d'image (évite les doublons)
-const showCover = coverImage && !/!\[[^\]]*\]\(|<img\b/.test(entry.body ?? '');
+// Couverture affichée seulement si le texte ne contient pas déjà d'image ou de vidéo (évite les doublons)
+const showCover = coverImage && !/!\[[^\]]*\]\(|<(img|video|iframe)\b/.test(entry.body ?? '');
 ---
 
 <Base title={title} description={description} image={ogImage}>

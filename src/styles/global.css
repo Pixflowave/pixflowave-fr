@@ -241,3 +241,16 @@ a:hover { text-decoration-thickness: 1.5px; }
 @media (max-width: 30rem) {
   .prev-next { grid-template-columns: 1fr; }
 }
+
+/* Vidéos intégrées dans les articles (PeerTube, Vimeo…) : 16:9, adaptées à l'écran */
+article :is(video, iframe) {
+  display: block;
+  width: 100%;
+  max-width: 56rem;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  margin: 1.5rem auto;
+  border: 0;
+  background: #000;
+  border-radius: 6px;
+}
