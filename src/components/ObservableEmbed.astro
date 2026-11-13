@@ -1,41 +1,54 @@
 ---
+/**
+ * Graphique d'un notebook Observable, dessiné directement dans la page
+ * avec le runtime Observable (comme sur l'ancien site WordPress) :
+ * pas d'iframe, donc pas de bandeau « Observable » en dessous.
+ */
+
 interface Props {
-  src: string;
+  /** Notebook, ex. "@pixflowave/graph_neguentropie" ou "@pixflowave/airocean-attracteur-de-lorentz@710" */
+  notebook: string;
+  /** Nom de la cellule à afficher, ex. "chartR" */
+  cell: string;
   title: string;
-  height?: string;
-  ratio?: string;
+  /** Inverse les couleurs en mode sombre (graphiques dessinés en noir sur blanc) */
   invert?: boolean;
+  /** Prend la hauteur d'un autre graphique du même bloc (nom de sa cellule, ex. "dual") */
+  sameHeightAs?: string;
 }
 
-const { src, title, height = '80vh', ratio, invert = false } = Astro.props;
-const id = `embed-${Math.random().toString(36).slice(2, 8)}`;
-const frameStyle = ratio ? `aspect-ratio:${ratio};height:auto` : `height:${height}`;
+const { notebook, cell, title, invert = false, sameHeightAs } = Astro.props;
+const embedUrl = `https://observablehq.com/embed/${notebook}?cells=${cell}`;
 ---
 
 <figure class:list={['embed', { invert }]}>
-  <iframe
-    id={id}
-    src={src}
-    title={title}
-    loading="lazy"
-    allowfullscreen
-    style={frameStyle}
-  ></iframe>
+  <div
+    class="graph"
+    role="img"
+    aria-label={title}
+    data-notebook={notebook}
+    data-cell={cell}
+    data-same-height-as={sameHeightAs}
+  ></div>
   <figcaption>
-    <button type="button" data-fs={id}>Plein écran</button>
-    <a href={src} target="_blank" rel="noopener">Ouvrir le graphique seul ↗</a>
+    <button type="button" class="fs">Plein écran</button>
+    <a href={embedUrl} target="_blank" rel="noopener">Ouvrir le graphique seul ↗</a>
     <slot />
   </figcaption>
 </figure>
 
 <style>
-  .embed { margin: 0; }
-  iframe {
-    display: block;
+  .embed { margin: 0; min-width: 0; }
+  .graph {
     width: 100%;
-    border: 0;
-    border-block: 1px solid var(--line);
+    min-height: 12rem;
+    overflow: hidden;
+    border-block: 1px solid var(--rule);
+    background: #fff;
+    color: #111;
   }
+  .graph:fullscreen { display: grid; place-items: center; overflow: auto; }
+  .graph :global(svg), .graph :global(canvas), .graph :global(img) { max-width: 100%; height: auto; }
   figcaption {
     margin-top: .5rem;
     color: var(--muted);
@@ -46,15 +59,61 @@ const frameStyle = ratio ? `aspect-ratio:${ratio};height:auto` : `height:${heigh
     gap: .25rem 1rem;
   }
   @media (prefers-color-scheme: dark) {
-    .invert iframe { filter: invert(0.85) hue-rotate(180deg); }
+    /* inversion du dessin seulement : le cadre et son trait gardent leurs couleurs */
+    .invert .graph { background: #262626; }
+    .invert .graph > :global(*) { filter: invert(0.85) hue-rotate(180deg); }
   }
 </style>
 
 <script>
-  document.querySelectorAll('button[data-fs]').forEach((button) => {
-    button.addEventListener('click', () => {
-      const id = button.getAttribute('data-fs');
-      if (id) document.getElementById(id)?.requestFullscreen();
-    });
-  });
+  import { Runtime, Inspector, Library } from '@observablehq/runtime';
+
+  const { Generators } = new Library(); // utilitaires Observable
+
+  for (const el of document.querySelectorAll<HTMLElement>('.graph[data-notebook]')) {
+    const { notebook, cell } = el.dataset;
+    if (!notebook || !cell) continue;
+
+    // Bouton plein écran de ce graphique
+    el.closest('figure')?.querySelector('.fs')?.addEventListener('click', () => el.requestFullscreen?.());
+
+    // Même hauteur qu'un autre graphique du bloc (suivie en continu)
+    const modele = el.dataset.sameHeightAs
+      ? el.closest('.embeds')?.querySelector<HTMLElement>(`.graph[data-cell="${el.dataset.sameHeightAs}"]`)
+      : null;
+    if (modele) {
+      el.style.minHeight = '0';
+      new ResizeObserver(() => {
+        if (document.fullscreenElement === el) return;
+        el.style.height = `${modele.getBoundingClientRect().height}px`;
+      }).observe(modele);
+    }
+
+    // Le notebook est chargé seulement quand le graphique approche de l'écran
+    const io = new IntersectionObserver(async (entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      try {
+        const url = `https://api.observablehq.com/${notebook}.js?v=4`;
+        const { default: define } = await import(/* @vite-ignore */ url);
+        // « width » = largeur de l'emplacement du graphique, pas de toute la fenêtre.
+        // Défini comme fonction intégrée du runtime pour s'appliquer aussi
+        // aux notebooks importés par celui-ci (sinon le dessin est mal dimensionné).
+        const library = new Library();
+        library.width = () =>
+          Generators.observe((notify: (w: number) => void) => {
+            const ro = new ResizeObserver(([entry]) => notify(Math.round(entry.contentRect.width)));
+            ro.observe(el);
+            notify(el.clientWidth);
+            return () => ro.disconnect();
+          });
+        new Runtime(library).module(define, (name: string) =>
+          name === cell ? new Inspector(el) : undefined
+        );
+      } catch {
+        el.textContent = 'Graphique indisponible pour le moment.';
+      }
+    }, { rootMargin: '200px' });
+    io.observe(el);
+  }
 </script>

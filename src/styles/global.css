@@ -4,6 +4,7 @@
   --muted: #5a6068;
   --accent: #1f5f8b;
   --line: #e3e0d8;
+  --rule: #c9c5bc;   /* trait au-dessus des graphiques et des articles */
   --edge: 5px;
   --title: #00ba97;
   --link: #00ba97;
@@ -16,6 +17,7 @@
     --muted: #a3a8b0;
     --accent: #7db7e0;
     --line: #2b2f36;
+    --rule: #bdbab5;
     --title: #00ba97;
     --link: #00ba97;
   }
@@ -24,6 +26,7 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 html {
+  font-size: 15px;   /* taille de base du texte (titre du site exclu, en px) */
   font-family: "Raleway Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   line-height: 1.65;
   background: var(--bg);
@@ -55,7 +58,11 @@ main, .site-header .inner, .site-footer .inner {
 
 main { flex: 1; padding-block: 2rem; }
 
-h1, h2, h3 { line-height: 1.2; }
+h1, h2, h3, h4, h5, h6 { line-height: 1.25; font-weight: 600; }
+h1 { font-size: 1.75rem; }
+h2 { font-size: 1.35rem; }
+h3 { font-size: 1.15rem; }
+h4, h5, h6 { font-size: 1rem; }
 img { max-width: 100%; height: auto; }
 /* Liens : soulignement fin et un peu décollé du texte */
 a {
@@ -92,7 +99,7 @@ a:hover { text-decoration-thickness: 1.5px; }
 }
 
 .brand span {
-  font-size: 2.25rem;
+  font-size: 36px;   /* titre du site : taille fixe, indépendante du texte */
   font-weight: 300;
   letter-spacing: .15em;
   margin-right: -.15em; /* compense l'espace ajouté après la dernière lettre (centrage) */
@@ -116,34 +123,42 @@ a:hover { text-decoration-thickness: 1.5px; }
 .footer-center p { margin: 0; }
 .footer-portrait { border-radius: .5rem; }
 
-.lede { font-size: 1.15rem; }
+.lede { font-size: 1.05rem; }
 
+/* Bloc « page d'accueil » (accueil, et à côté de chaque article).
+   Ses grilles s'adaptent à la largeur du bloc lui-même (container queries). */
+.home { container-type: inline-size; }
+
+/* Les deux graphiques : côte à côte dès qu'il y a la place, sinon l'un sous l'autre */
 .embeds {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 30rem), 1fr));
+  grid-template-columns: 1fr;
   gap: var(--edge);
   align-items: start;
-  margin: 2rem 0;
+  margin: 0 0 2rem;
+}
+@container (min-width: 30rem) {
+  .embeds { grid-template-columns: 1fr 1fr; }
 }
 
-/* Articles (accueil) : 3 cadres par ligne sur ordinateur, 1 sur smartphone */
+/* Cadres d'articles : 3 par ligne si large, 2 si moyen, 1 sur smartphone */
 .cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr;
   gap: 1rem;
   list-style: none;
   padding: 0;
   margin: 1rem 0;
 }
-@media (max-width: 60rem) { .cards { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 36rem) { .cards { grid-template-columns: 1fr; } }
+@container (min-width: 30rem) { .cards { grid-template-columns: repeat(2, 1fr); } }
+@container (min-width: 54rem) { .cards { grid-template-columns: repeat(3, 1fr); } }
 .more-articles > summary {
   cursor: pointer;
   color: var(--link);
   margin-block: .5rem;
 }
 
-/* Bas d'article : précédent / suivant puis bandeau « Autres articles » */
+/* Bas d'article : précédent / suivant */
 .article-nav { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
 .prev-next {
   display: grid;
@@ -151,20 +166,6 @@ a:hover { text-decoration-thickness: 1.5px; }
   gap: .75rem;
 }
 .prev-next > :last-child { text-align: right; }
-/* Bandeau défilant au doigt (remplace la colonne de droite de l'ancien site) */
-.strip {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: min(75%, 17rem);
-  gap: .75rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  overscroll-behavior-x: contain;
-  list-style: none;
-  padding: 0 0 .75rem;
-  margin: 0;
-}
-.strip > li { scroll-snap-align: start; }
 
 /* Images dans le texte (pages et articles) : regroupées dans un cadre
    par src/lib/rehype-image-groups.mjs. Côte à côte si la place le permet,
@@ -253,4 +254,30 @@ article :is(video, iframe) {
   border: 0;
   background: #000;
   border-radius: 6px;
+}
+
+/* Article + page d'accueil complète :
+   côte à côte sur ordinateur, l'accueil passe en dessous sur smartphone */
+.home-aside {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--line);
+}
+.home-nom { font-size: 1.75rem; }
+/* trait clair en haut de l'article, aligné sur celui des graphiques */
+.article-layout .article-main { border-top: 1px solid var(--rule); }
+@media (min-width: 64rem) {
+  .article-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 5px;               /* gouttière centrale : 5px + 5px autour du trait */
+    align-items: start;
+  }
+  .home-aside {
+    margin-top: 0;
+    padding-top: 0;
+    padding-left: 5px;
+    border-top: 0;
+    border-left: 1px solid var(--line);
+  }
 }

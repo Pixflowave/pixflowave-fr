@@ -4,6 +4,7 @@ import { Image, getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Galerie from '../components/Galerie.astro';
 import ArticleCard from '../components/ArticleCard.astro';
+import HomeContent from '../components/HomeContent.astro';
 import { getArticles, slugOf, excerpt } from '../lib/articles';
 
 export async function getStaticPaths() {
@@ -18,13 +19,12 @@ export async function getStaticPaths() {
         entry,
         newer: articles[i - 1], // article plus récent
         older: articles[i + 1], // article plus ancien
-        others: articles.filter((a) => a !== entry),
       },
     })),
   ];
 }
 
-const { entry, newer, older, others = [] } = Astro.props;
+const { entry, newer, older } = Astro.props;
 const { Content } = await render(entry);
 const { title, heading, date, tags, coverImage } = entry.data;
 const isArticle = entry.collection === 'articles';
@@ -40,46 +40,44 @@ const showCover = coverImage && !/!\[[^\]]*\]\(|<(img|video|iframe)\b/.test(entr
 ---
 
 <Base title={title} description={description} image={ogImage}>
-  <article class:list={{ 'article-content': isArticle }}>
-    <h1>{heading ?? title}</h1>
-    {isArticle && date && (
-      <p>
-        <time datetime={date.toISOString()}>
-          {date.toLocaleDateString('fr-FR', { dateStyle: 'long' })}
-        </time>
-      </p>
-    )}
-    {showCover && (
-      <Image src={coverImage} alt="" widths={[600, 1000, 1400]} sizes="(max-width: 60rem) 100vw, 60rem" class="cover" />
-    )}
-    {slug === 'image' && <Galerie />}
-    <Content />
-    {isArticle && tags.length > 0 && (
-      <ul class="tags">
-        {tags.map((tag) => <li>#{tag}</li>)}
-      </ul>
-    )}
-  </article>
-
-  {isArticle && (
-    <nav class="article-nav" aria-label="Articles">
-      {(older || newer) && (
-        <div class="prev-next">
-          {older ? <ArticleCard entry={older} label="← Précédent" compact /> : <span />}
-          {newer ? <ArticleCard entry={newer} label="Suivant →" compact /> : <span />}
-        </div>
-      )}
-
-      {others.length > 0 && (
-        <>
-          <h2>Autres articles</h2>
-          <ul class="strip">
-            {others.map((a) => (
-              <li><ArticleCard entry={a} /></li>
-            ))}
+  <div class:list={{ 'article-layout': isArticle }}>
+    <div class="article-main">
+      <article class:list={{ 'article-content': isArticle }}>
+        <h1>{heading ?? title}</h1>
+        {isArticle && date && (
+          <p>
+            <time datetime={date.toISOString()}>
+              {date.toLocaleDateString('fr-FR', { dateStyle: 'long' })}
+            </time>
+          </p>
+        )}
+        {showCover && (
+          <Image src={coverImage} alt="" widths={[600, 1000, 1400]} sizes="(max-width: 60rem) 100vw, 60rem" class="cover" />
+        )}
+        {slug === 'image' && <Galerie />}
+        <Content />
+        {isArticle && tags.length > 0 && (
+          <ul class="tags">
+            {tags.map((tag) => <li>#{tag}</li>)}
           </ul>
-        </>
+        )}
+      </article>
+
+      {isArticle && (older || newer) && (
+        <nav class="article-nav" aria-label="Article précédent ou suivant">
+          <div class="prev-next">
+            {older ? <ArticleCard entry={older} label="← Précédent" compact /> : <span />}
+            {newer ? <ArticleCard entry={newer} label="Suivant →" compact /> : <span />}
+          </div>
+        </nav>
       )}
-    </nav>
-  )}
+    </div>
+
+    {/* Page d'accueil complète : à droite sur ordinateur, en dessous sur smartphone */}
+    {isArticle && (
+      <aside class="home-aside" aria-label="Accueil">
+        <HomeContent aside />
+      </aside>
+    )}
+  </div>
 </Base>
