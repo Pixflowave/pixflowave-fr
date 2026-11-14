@@ -7,6 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "prebuild": "node -e \"for (const f of ['node_modules/.astro/data-store.json', '.astro/data-store.json']) require('fs').rmSync(f, { force: true })\"",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
