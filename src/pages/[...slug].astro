@@ -40,19 +40,19 @@ const showCover = coverImage && !/!\[[^\]]*\]\(|<(img|video|iframe)\b/.test(entr
 ---
 
 <Base title={title} description={description} image={ogImage}>
-  <div class:list={{ 'article-layout': isArticle }}>
+  <div class="article-layout">
     <div class="article-main">
-      <article class:list={{ 'article-content': isArticle }}>
+      <article class="article-content">
+        {showCover && (
+          <Image src={coverImage} alt="" widths={[600, 1000, 1400]} sizes="(max-width: 60rem) 100vw, 60rem" class="cover en-tete" />
+        )}
         <h1>{heading ?? title}</h1>
         {isArticle && date && (
-          <p>
+          <p class="article-date">
             <time datetime={date.toISOString()}>
               {date.toLocaleDateString('fr-FR', { dateStyle: 'long' })}
             </time>
           </p>
-        )}
-        {showCover && (
-          <Image src={coverImage} alt="" widths={[600, 1000, 1400]} sizes="(max-width: 60rem) 100vw, 60rem" class="cover" />
         )}
         {slug === 'image' && <Galerie />}
         <Content />
@@ -73,11 +73,24 @@ const showCover = coverImage && !/!\[[^\]]*\]\(|<(img|video|iframe)\b/.test(entr
       )}
     </div>
 
-    {/* Page d'accueil complète : à droite sur ordinateur, en dessous sur smartphone */}
-    {isArticle && (
+    {/* Page d'accueil complète (articles et pages) : à droite sur ordinateur, en dessous sur smartphone */}
+    {(
       <aside class="home-aside" aria-label="Accueil">
         <HomeContent aside />
       </aside>
     )}
   </div>
 </Base>
+
+<script>
+  // Ordinateur : le bloc d'images du début de l'article prend la hauteur
+  // des graphiques de la colonne d'accueil (variable CSS --graph-h).
+  const graphe =
+    document.querySelector<HTMLElement>('.home-aside .graph[data-cell="dual"]') ??
+    document.querySelector<HTMLElement>('.home-aside .graph');
+  if (graphe) {
+    new ResizeObserver(() => {
+      document.documentElement.style.setProperty('--graph-h', `${graphe.getBoundingClientRect().height}px`);
+    }).observe(graphe);
+  }
+</script>

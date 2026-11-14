@@ -22,7 +22,6 @@ tags:
 coverImage: "./images/HTD2022-Instagram-Publication-1080x1080-1.png"
 ---
 
-## Néguentropie | La Fabrique de Blois
 
 ![#HTD2022 Human Tech Day](images/HTD2022-Bandeau-Web_1170x500-1024x438.png)
 

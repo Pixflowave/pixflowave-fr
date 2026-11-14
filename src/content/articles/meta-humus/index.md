@@ -15,13 +15,13 @@ tags:
 coverImage: "./images/Instagram_Publication_1080x1080.png"
 ---
 
-![Méta-Humus](images/Meta-Humus-1158x500-1-1024x442.jpg)
+![MSH VDL Neguentropie](images/MSH_VDL-Neguentropie-1024x246.jpg)
 
-![Méta - Humus](images/DSC_0049-1024x682.jpg)
+![Méta-Humus](images/Meta-Humus-1158x500-1-1024x442.jpg)
 
 ![Méta - Humus](images/img-7580-1024x768.jpeg)
 
-![MSH VDL Neguentropie](images/MSH_VDL-Neguentropie-1024x246.jpg)
+![Méta - Humus](images/DSC_0049-1024x682.jpg)
 
 Dans le cadre de l'initiative régionale [**Human Tech Days**](https://www.humantechdays.fr/), proposée par la Région Centre Val de Loire, la Maison des Sciences de l'Homme du Val de Loire accueillera dans ses locaux cette année l'évènement  
 **"[Méta-Humus](https://do.doc.neguentropie.art/_publications/meta-humus)" du 27 au 29 juin 2023**.

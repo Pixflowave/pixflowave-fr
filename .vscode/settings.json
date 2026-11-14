@@ -1,0 +1,9 @@
+{
+  // Retour à la ligne automatique à l'affichage (les fichiers ne sont pas modifiés) :
+  // plus besoin de l'ascenseur horizontal pour lire les longues lignes.
+  "editor.wordWrap": "on",
+  "editor.wrappingIndent": "same",
+  "[markdown]": {
+    "editor.wordWrap": "on"
+  }
+}

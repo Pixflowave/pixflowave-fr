@@ -167,36 +167,95 @@ a:hover { text-decoration-thickness: 1.5px; }
 }
 .prev-next > :last-child { text-align: right; }
 
-/* Images dans le texte (pages et articles) : regroupées dans un cadre
-   par src/lib/rehype-image-groups.mjs. Côte à côte si la place le permet,
-   sinon l'une sous l'autre ; jamais trop grandes. */
+/* Images dans le texte (pages et articles) : regroupées par
+   src/lib/rehype-image-groups.mjs. Sans cadre, toute la largeur de l'article.
+   --img-h : hauteur maximale ; au-delà, l'image est rognée en haut et en bas
+   (object-fit: cover), jamais déformée. */
+:root { --img-h: 26rem; }
 .images {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
-  gap: .75rem;
-  margin: 1.5rem auto;
-  padding: .75rem;
-  max-width: 56rem;
-  border: 1px solid var(--line);
-  border-radius: 6px;
+  align-items: flex-start;   /* ne jamais étirer une image */
+  gap: .5rem;
+  margin: 1.5rem 0;
 }
+/* --r = largeur/hauteur : même hauteur pour toutes les images d'une rangée */
 .images > img,
 .images > a {
-  flex: 1 1 15rem;
-  max-width: 28rem;
+  --r: 1.5;
+  flex: var(--r) 1 calc(var(--r) * 12rem);
+  max-width: var(--w, 100%);   /* une petite image (logo) n'est pas agrandie */
   min-width: 0;
 }
 .images img {
   display: block;
-  margin-inline: auto;
-  width: auto;          /* jamais agrandie au-delà de sa taille réelle */
-  max-width: 100%;
+  width: 100%;
   height: auto;
-  max-height: 22rem;
+  max-height: var(--img-h);
+  object-fit: cover;
+}
+/* Panoramas : chacun sur sa propre rangée */
+.images > .pano { flex-basis: 100%; }
+/* Image seule : proportions entières (pas de rognage), largeur réduite si besoin */
+.images.seule > * { flex: 0 1 auto; max-width: 100%; }
+.images.seule img {
+  width: auto;
+  max-width: 100%;
   object-fit: contain;
 }
+
+/* Deux panoramas : sur une même rangée, même hauteur (sauf smartphone) */
+.images.cote-a-cote { flex-wrap: nowrap; }
+.images.cote-a-cote > * { flex: var(--r) 1 0; }
+@media (max-width: 40rem) {
+  .images.cote-a-cote { flex-wrap: wrap; }
+  .images.cote-a-cote > * { flex-basis: 100%; }
+}
+/* ![texte](image.png "petit") : moitié de la largeur (logos, bandeaux de partenaires) */
+.images > .petit { flex: 0 1 50%; }
+
+/* Mosaïque : images carrées empilées à gauche, images larges empilées à droite.
+   Hauteur = largeur de l'article / --k (hauteur naturelle), plafonnée à --img-h :
+   au-delà, les images sont rognées mais l'ensemble garde toute la largeur. */
+.article-content { container-type: inline-size; }
+.images.mosaic {
+  flex-wrap: nowrap;
+  align-items: stretch;
+  height: min(var(--img-h), calc(100cqw / var(--k)));
+}
+.mosaic-col {
+  min-width: 0;
+  min-height: 0;
+  display: grid;          /* rangées en fr, fixées par le plugin */
+  gap: .5rem;
+}
+.mosaic-gauche { flex: var(--a) 1 0; }
+.mosaic-droite { flex: 1 1 0; }
+.mosaic-col > * { min-height: 0; max-width: none; }
+.images.mosaic img {
+  height: 100%;
+  max-height: none;
+}
+/* Article : les images (ou la vidéo) du début passent au-dessus du titre et de la date.
+   Mise en colonne flex pour pouvoir réordonner ; les marges basses sont retirées
+   car elles ne fusionnent plus avec les marges hautes. */
+.article-content { display: flex; flex-direction: column; }
+.article-content > * { margin-bottom: 0; min-width: 0; max-width: 100%; }
+.article-content > .en-tete { order: -1; margin-top: 0; }
+.article-content > .en-tete > :first-child { margin-top: 0; }
+.article-content > .cover { margin: 0; }
+.article-content > h1 { margin-top: 1.25rem; }
+.article-content > .article-date { margin-top: .25rem; color: var(--muted); }
+.article-content > .tags { margin-top: 2rem; }
+
+/* Smartphone : la mosaïque redevient une seule colonne */
+@media (max-width: 40rem) {
+  .images.mosaic { flex-direction: column; height: auto; }
+  .mosaic-col { display: flex; flex-direction: column; flex: none; }
+  .images.mosaic img { height: auto; max-height: var(--img-h); }
+}
+
 
 .liens { text-align: center; margin-top: 2.5rem; }
 .social {
@@ -272,6 +331,39 @@ article :is(video, iframe) {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 5px;               /* gouttière centrale : 5px + 5px autour du trait */
     align-items: start;
+  }
+  /* Bloc d'images du début de l'article : même hauteur que les graphiques (--graph-h,
+     mesurée par le script de [...slug].astro). Images rognées si besoin, jamais déformées. */
+  .article-layout .en-tete.images {
+    flex-wrap: nowrap;
+    align-items: stretch;
+    height: var(--graph-h, auto);
+  }
+  .article-layout .en-tete.images.mosaic {
+    height: var(--graph-h, min(var(--img-h), calc(100cqw / var(--k))));
+  }
+  .article-layout .en-tete.images:not(.mosaic) > * {
+    flex: var(--r) 1 0;      /* une seule rangée, largeurs selon les proportions */
+    max-width: none;
+    min-height: 0;
+  }
+  .article-layout .en-tete.images:not(.mosaic) img { height: 100%; max-height: none; }
+  /* une seule image : hauteur des graphiques, largeur selon ses proportions, sans rognage */
+  .article-layout .en-tete.images.seule > * { flex: 0 1 auto; max-width: var(--w, 100%); }  /* jamais agrandie */
+  .article-layout .en-tete.images.seule img { width: auto; max-width: 100%; object-fit: contain; }
+  .article-layout .en-tete > iframe,
+  .article-layout .en-tete > video {
+    height: var(--graph-h, auto);
+    max-width: none;
+    aspect-ratio: auto;
+    margin: 0;
+  }
+  .article-layout img.cover.en-tete {
+    height: var(--graph-h, auto);
+    width: auto;            /* proportions entières : largeur réduite plutôt que rognage */
+    max-width: 100%;
+    align-self: center;
+    object-fit: contain;
   }
   .home-aside {
     margin-top: 0;

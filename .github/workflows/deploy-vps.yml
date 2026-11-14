@@ -1,0 +1,65 @@
+name: Déploiement sur le VPS
+
+# Construit le site pour https://pixflowave.fr et l'envoie sur le VPS (nginx)
+# à chaque push sur main. Secrets à définir dans GitHub
+# (Settings → Secrets and variables → Actions) :
+#   VPS_HOST         adresse IP ou nom du VPS
+#   VPS_USER         utilisateur de déploiement (ex. deploy-pixflowave)
+#   VPS_SSH_KEY      clé privée SSH dédiée à ce déploiement
+#   VPS_KNOWN_HOSTS  sortie de : ssh-keyscan -t ed25519 <VPS_HOST>
+# Voir deploy/INSTALLATION.md
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-vps
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      # vide tant que les secrets ne sont pas configurés : l'envoi est alors sauté
+      VPS_HOST: ${{ secrets.VPS_HOST }}
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Construire le site (pour pixflowave.fr, sans PREVIEW)
+        run: |
+          npm ci
+          npm run build
+
+      - name: Secrets absents, envoi sauté
+        if: env.VPS_HOST == ''
+        run: |
+          echo "::notice::Secrets VPS non configurés, site construit mais pas envoyé (voir deploy/INSTALLATION.md)"
+
+      - name: Préparer la connexion SSH
+        if: env.VPS_HOST != ''
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          printf '%s\n' "${{ secrets.VPS_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+
+      - name: Envoyer sur le VPS
+        if: env.VPS_HOST != ''
+        # L'utilisateur est limité par rrsync au dossier du site :
+        # « / » désigne ce dossier, pas la racine du serveur.
+        run: |
+          rsync -rlz --delete --chmod=D755,F644 \
+            -e "ssh -i ~/.ssh/id_deploy -o IdentitiesOnly=yes" \
+            dist/ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/"

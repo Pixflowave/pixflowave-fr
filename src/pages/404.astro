@@ -1,0 +1,11 @@
+---
+import Base from '../layouts/Base.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<Base title="Page introuvable">
+  <h1>Page introuvable</h1>
+  <p>Cette page n'existe pas ou a été déplacée lors du passage au nouveau site.</p>
+  <p><a href={`${base}/`}>Retour à l'accueil</a></p>
+</Base>
